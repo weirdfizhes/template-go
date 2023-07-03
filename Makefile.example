@@ -1,0 +1,111 @@
+# GO ENV
+GOAPP=go
+BINARY=bin/server.sh
+MAIN_FILE=cmd/server.go
+RUNNER=nodemon
+PORT=8000
+
+# SOCKET MASTER ENV
+SMBINARY=bin/socketmaster
+
+# MIGRATE ENV
+MIGRATEBINARY=bin/migrate
+PG_MIGRATIONS_FOLDER=./migrations
+PG_DB_URL=postgresql://postgres:postgres@127.0.0.1:5432/<db-name>?sslmode=disable
+
+# DEPENDENCY ENV
+GO_MAJOR_VERSION:=$(shell $(GOAPP) version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f1)
+GO_MINOR_VERSION:=$(shell $(GOAPP) version | cut -c 14- | cut -d' ' -f1 | cut -d'.' -f2)
+MINIMUM_SUPPORTED_GO_MAJOR_VERSION:=1
+MINIMUM_SUPPORTED_GO_MINOR_VERSION:=19
+GO_VERSION_VALIDATION_ERR_MSG:=Golang version is not supported, please update to at least $(MINIMUM_SUPPORTED_GO_MAJOR_VERSION).$(MINIMUM_SUPPORTED_GO_MINOR_VERSION)
+
+# PREPARATION
+validate.version:
+	@if [ $(GO_MAJOR_VERSION) -gt $(MINIMUM_SUPPORTED_GO_MAJOR_VERSION) ]; then \
+		exit 0 ;\
+	elif [ $(GO_MAJOR_VERSION) -lt $(MINIMUM_SUPPORTED_GO_MAJOR_VERSION) ]; then \
+		echo '$(GO_VERSION_VALIDATION_ERR_MSG)';\
+		exit 1; \
+	elif [ $(GO_MINOR_VERSION) -lt $(MINIMUM_SUPPORTED_GO_MINOR_VERSION) ] ; then \
+		echo '$(GO_VERSION_VALIDATION_ERR_MSG)';\
+		exit 1; \
+	fi
+validate.submodule.socketmaster:
+	@if [ -s $(SMBINARY) ]; then \
+		echo "" > /dev/null;\
+	else \
+		echo "Update socketmaster submodule..."; \
+		git submodule update --init;\
+	fi
+validate.submodule.migrate:
+	@if [ -s $(MIGRATEBINARY) ]; then \
+		echo "" > /dev/null;\
+	else \
+		echo "Update migrate submodule..."; \
+		git submodule update --init;\
+	fi
+
+check.binary.socketmaster: validate.submodule.socketmaster
+	@if [ -s $(SMBINARY) ]; then \
+		echo "" > /dev/null;\
+	else \
+		echo "Building the socketmaster binary apps..."; \
+		make build.socketmaster;\
+	fi
+check.binary.migrate: validate.submodule.migrate
+	@if [ -s $(MIGRATEBINARY) ]; then \
+		echo "" > /dev/null;\
+	else \
+		echo "Building the migrate binary apps..."; \
+		make build.migrate;\
+	fi
+check.binary.go:
+	@if [ -f $(BINARY) ]; then \
+		echo "" > /dev/null;\
+	else \
+		echo "Building the go binary apps..."; \
+		make build.go;\
+	fi
+
+# DEPENDENCY INSTALLMENT
+env:
+	cp example.env .env
+install.deps:
+	$(GOAPP) mod download && $(GOAPP) mod tidy
+
+# MIGRATE
+build.migrate: validate.submodule.migrate
+	make build -C ./tool/migrate && mv ./tool/migrate/migrate bin/migrate
+gen.pg.migration: check.binary.migrate
+	$(MIGRATEBINARY) create -ext sql -dir $(PG_MIGRATIONS_FOLDER) --seq $(name)
+pg.migrate.up: check.binary.migrate
+	$(MIGRATEBINARY) -path $(PG_MIGRATIONS_FOLDER) -database $(PG_DB_URL) --verbose up
+pg.migrate.down: check.binary.migrate
+	$(MIGRATEBINARY) -path $(PG_MIGRATIONS_FOLDER) -database $(PG_DB_URL) --verbose down
+pg.migrate.fix: check.binary.migrate
+	$(MIGRATEBINARY) -path $(PG_MIGRATIONS_FOLDER) -database $(PG_DB_URL) force $(version)
+	
+# BUILD APP
+build.go: validate.version
+	$(GOAPP) build -o $(BINARY) $(MAIN_FILE)
+
+# BUILD SOCKETMASTER
+build.socketmaster: validate.submodule.socketmaster
+	make -C ./tool/socketmaster && mv ./tool/socketmaster/socketmaster bin/socketmaster
+
+# RUN APP
+## Server
+start.dev: validate.version
+	$(RUNNER) --exec $(GOAPP) run $(MAIN_FILE) --signal SIGTERM
+start: validate.version
+	$(GOAPP) run $(MAIN_FILE)
+
+## Binary
+start.binary: check.binary.go
+	./$(BINARY)
+start.sm: check.binary.socketmaster check.binary.go
+	$(SMBINARY) -listen=tcp://:$(PORT) -command=$(BINARY) -wait-child-notif=true
+
+kill.sm:
+	kill -s SIGHUP $(SMPORT)

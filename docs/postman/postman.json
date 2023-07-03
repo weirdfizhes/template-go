@@ -1,0 +1,683 @@
+{
+	"info": {
+		"_postman_id": "88f2b995-40b4-4a68-9c13-ca1eeec32b06",
+		"name": "Template Go Postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18850857"
+	},
+	"item": [
+		{
+			"name": "Migration",
+			"item": [
+				{
+					"name": "Migrate",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Migration-Key",
+								"value": "{{migrationKey}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/migrate/up",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"migrate",
+								"up"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authorization",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Fadlan Minallah\",\n    \"email\": \"fadlanminallah@gmail.com\",\n    \"password\": \"password\",\n    \"is_super_admin\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/auth/user",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"user"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Register User",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Fadlan Minallah\",\n    \"email\": \"fadlanminallah@gmail.com\",\n    \"password\": \"password\",\n    \"is_super_admin\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/auth/user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 May 2023 13:43:19 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "161"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"id\": \"9d486407-dd8e-460c-93b1-c7b5b57851dc\",\n        \"name\": \"Fadlan Minallah\",\n        \"email\": \"fadlanminallah@gmail.com\"\n    },\n    \"message\": \"Successful create user\",\n    \"error\": \"\"\n}"
+						},
+						{
+							"name": "Email Taken",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Fadlan Minallah\",\n    \"email\": \"fadlanminallah@gmail.com\",\n    \"password\": \"password\",\n    \"is_super_admin\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/auth/user",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"user"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 May 2023 13:43:32 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "75"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": null,\n    \"message\": \"Error create user\",\n    \"error\": \"email has been taken\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var body = pm.response.json()",
+									"pm.environment.set(\"accessToken\", body.data.token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"!J8pJD5Ts$sp8qc7\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login User",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"!J8pJD5Ts$sp8qc7\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/auth/login",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 May 2023 13:42:59 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "333"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJjcmVhdGVkX2F0IjoiMjAyMy0wNC0yOFQxODo0OTo1My4zNzQ2NzVaIiwiZXhwIjoxNjgzMTIyMjc5LCJpc3MiOiI3OWUyNDVhYy05MWExLTQyMmMtYWI1Yy00MWM4ZGIwNDIyMWMifQ.RmxtP_EGIQ_yzBq_mzVbS1xOBWaqMCQ09tKz4BhNj6mke4AaZ88FSGKg91uVNpp1BB_LpiBp0m8uiiQc_UlN_g\"\n    },\n    \"message\": \"Successful login user\",\n    \"error\": \"\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/auth/user?page=1&limit=3&search=ad",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"user"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								},
+								{
+									"key": "search",
+									"value": "ad"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Search User",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/auth/user?page=1&limit=3&search=ad",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										},
+										{
+											"key": "search",
+											"value": "ad"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 06 May 2023 06:24:11 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "600"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": \"79e245ac-91a1-422c-ab5c-41c8db04221c\",\n            \"name\": \"Admin\",\n            \"email\": \"admin@gmail.com\",\n            \"is_super_admin\": true,\n            \"created_at\": \"2023-04-28T18:49:53.374675Z\",\n            \"created_by\": \"\",\n            \"updated_at\": \"2023-05-03T20:44:34.19727Z\",\n            \"updated_by\": \"\"\n        },\n        {\n            \"id\": \"9d486407-dd8e-460c-93b1-c7b5b57851dc\",\n            \"name\": \"Fadlan Minallah\",\n            \"email\": \"fadlanminallah@gmail.com\",\n            \"is_super_admin\": false,\n            \"created_at\": \"2023-05-03T20:43:19.599295Z\",\n            \"created_by\": \"Admin\",\n            \"updated_at\": \"0001-01-01T00:00:00Z\",\n            \"updated_by\": \"\"\n        }\n    ],\n    \"message\": \"Successful get all users\",\n    \"error\": \"\",\n    \"paginate\": {\n        \"current_page\": 1,\n        \"limit\": 3,\n        \"total_page\": 1,\n        \"total_data\": 2\n    }\n}"
+						},
+						{
+							"name": "Get All Users",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/auth/user?page=1&limit=3",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"user"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 06 May 2023 06:24:11 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "600"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"id\": \"79e245ac-91a1-422c-ab5c-41c8db04221c\",\n            \"name\": \"Admin\",\n            \"email\": \"admin@gmail.com\",\n            \"is_super_admin\": true,\n            \"created_at\": \"2023-04-28T18:49:53.374675Z\",\n            \"created_by\": \"\",\n            \"updated_at\": \"2023-05-03T20:44:34.19727Z\",\n            \"updated_by\": \"\"\n        },\n        {\n            \"id\": \"9d486407-dd8e-460c-93b1-c7b5b57851dc\",\n            \"name\": \"Fadlan Minallah\",\n            \"email\": \"fadlanminallah@gmail.com\",\n            \"is_super_admin\": false,\n            \"created_at\": \"2023-05-03T20:43:19.599295Z\",\n            \"created_by\": \"Admin\",\n            \"updated_at\": \"0001-01-01T00:00:00Z\",\n            \"updated_by\": \"\"\n        }\n    ],\n    \"message\": \"Successful get all users\",\n    \"error\": \"\",\n    \"paginate\": {\n        \"current_page\": 1,\n        \"limit\": 3,\n        \"total_page\": 1,\n        \"total_data\": 2\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/auth/user/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "9d486407-dd8e-460c-93b1-c7b5b57851dc"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get User",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/auth/user/:id",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"user",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "9d486407-dd8e-460c-93b1-c7b5b57851dc"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 May 2023 13:44:11 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "297"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"id\": \"9d486407-dd8e-460c-93b1-c7b5b57851dc\",\n        \"name\": \"Fadlan Minallah\",\n        \"email\": \"fadlanminallah@gmail.com\",\n        \"is_super_admin\": false,\n        \"created_at\": \"2023-05-03T20:43:19.599295Z\",\n        \"created_by\": \"Admin\",\n        \"updated_at\": \"0001-01-01T00:00:00Z\",\n        \"updated_by\": \"\"\n    },\n    \"message\": \"Successful get user\",\n    \"error\": \"\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Fadlan Minallah\",\n    \"email\": \"fadlanminallah@cgmail.com\",\n    \"password\": \"password123\",\n    \"is_super_admin\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/auth/user/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "9d486407-dd8e-460c-93b1-c7b5b57851dc"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update User",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Fadlan Minallah\",\n    \"email\": \"fadlanminallah@cgmail.com\",\n    \"password\": \"password123\",\n    \"is_super_admin\": false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/auth/user/:id",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"user",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "9d486407-dd8e-460c-93b1-c7b5b57851dc"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 03 May 2023 13:44:34 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "162"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"id\": \"79e245ac-91a1-422c-ab5c-41c8db04221c\",\n        \"name\": \"Fadlan Minallah\",\n        \"email\": \"fadlanminallah@cgmail.com\"\n    },\n    \"message\": \"Successful update user\",\n    \"error\": \"\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/auth/user/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"auth",
+								"user",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "e73a819f-1be3-499d-bc6b-79ccc33c8ad6"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Delete User",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/auth/user/:id",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"auth",
+										"user",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "e73a819f-1be3-499d-bc6b-79ccc33c8ad6"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=UTF-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 11 Apr 2023 17:16:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "100"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"id\": \"e73a819f-1be3-499d-bc6b-79ccc33c8ad6\",\n        \"name\": \"Fadlan Minallah\"\n    },\n    \"message\": \"Success\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}

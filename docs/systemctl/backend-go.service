@@ -1,0 +1,17 @@
+[Unit]
+Description=backend-go
+
+[Service]
+Type=simple
+User=root
+Group=root
+LimitNOFILE=1024
+Restart=on-failure
+RestartSec=10
+startLimitIntervalSec=60
+WorkingDirectory=/var/www/html/template-backend-golang
+ExecStart=/var/www/html/template-backend-golang/bin/socketmaster -listen=tcp://:8000 -command=/var/www/html/template-backend-golang/bin/server.sh -wait-child-notif=true
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

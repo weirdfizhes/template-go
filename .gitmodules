@@ -1,0 +1,7 @@
+[submodule "tool/socketmaster"]
+	path = tool/socketmaster
+	url = https://github.com/tokopedia/socketmaster.git
+	branch = master
+[submodule "tool/migrate"]
+	path = tool/migrate
+	url = https://github.com/golang-migrate/migrate.git
