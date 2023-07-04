@@ -7,7 +7,8 @@ import (
 )
 
 type GetUserPayload struct {
-	GUID         string         `json:"id"`
+	ID           int            `json:"id"`
+	GUID         string         `json:"guid"`
 	Name         string         `json:"name"`
 	Email        string         `json:"email"`
 	Password     string         `json:"password"`
@@ -21,7 +22,7 @@ type GetUserPayload struct {
 }
 
 type readUser struct {
-	GUID         string     `json:"guid"`
+	GUID         string     `json:"id"`
 	Name         string     `json:"name"`
 	Email        string     `json:"email"`
 	IsSuperAdmin bool       `json:"is_super_admin"`

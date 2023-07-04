@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-cd `dirname $0`/childserver
-go fmt
-go build
-exec ./childserver -listen=fd://3

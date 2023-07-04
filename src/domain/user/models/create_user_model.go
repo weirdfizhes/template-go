@@ -10,7 +10,8 @@ import (
 )
 
 type CreateUserPayload struct {
-	GUID         string    `json:"guid"`
+	ID           int       `json:"id"`
+	GUID         string    `json:"guid" valid: "required"`
 	Name         string    `json:"name" valid:"required"`
 	Email        string    `json:"email" valid:"required"`
 	Password     string    `json:"password" valid:"required"`
@@ -20,7 +21,7 @@ type CreateUserPayload struct {
 }
 
 type ReturnCreateUserPayload struct {
-	GUID  string `json:"id"`
+	GUID  string `json:"GUID"`
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
