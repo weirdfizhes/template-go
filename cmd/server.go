@@ -13,9 +13,11 @@ import (
 )
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		logger.LogFatalError("Error read env file", err)
+	if os.Getenv("APP_ENV") == "" {
+		err := godotenv.Load(".env")
+		if err != nil {
+			logger.LogFatalError("Error read env file", err)
+		}
 	}
 
 	db := config.ConnectDB()
