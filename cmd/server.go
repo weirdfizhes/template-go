@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"template-go/config"
@@ -22,5 +23,5 @@ func main() {
 	svc := echohttp.NewService(db)
 
 	e := api.Routes(svc)
-	e.Logger.Fatal(echohttp.ServeHTTP(os.Getenv("PORT"), e))
+	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))))
 }
